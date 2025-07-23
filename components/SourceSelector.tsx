@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { RssSource } from '../types';
-import { AlertTriangleIcon, FireIcon, BuildingOfficeIcon, DocumentTextIcon, ArrowPathIcon } from './icons';
+import { AlertTriangleIcon, FireIcon, BuildingOfficeIcon, DocumentTextIcon, ArrowPathIcon, CogIcon } from './icons';
 import LoadingSpinner from './LoadingSpinner';
 import { ALL_SOURCES_OBJECT } from '../constants';
 
@@ -14,8 +14,11 @@ interface SourceSelectorProps {
   isGeneratingReport: boolean;
   onGenerateFocusedReport: (reportType: string) => void;
   onGenerateFullReport: () => void;
+  onGenerateCustomReport: () => void;
   onFetchAll: () => void;
   isLoading: boolean;
+  customSelection: string[];
+  onToggleCustomSource: (sourceUrl: string) => void;
 }
 
 const reportTypes = [
@@ -24,8 +27,22 @@ const reportTypes = [
     { name: 'Impact to Conglomerate', icon: BuildingOfficeIcon, type: 'Impact to Conglomerate' },
 ];
 
-const SourceSelector: React.FC<SourceSelectorProps> = ({ sources, selectedSource, onSelectSource, articleCount, isGeneratingReport, onGenerateFocusedReport, onGenerateFullReport, onFetchAll, isLoading }) => {
-  const canGenerate = articleCount >= 5;
+const SourceSelector: React.FC<SourceSelectorProps> = ({ 
+    sources, 
+    selectedSource, 
+    onSelectSource, 
+    articleCount, 
+    isGeneratingReport, 
+    onGenerateFocusedReport, 
+    onGenerateFullReport,
+    onGenerateCustomReport, 
+    onFetchAll, 
+    isLoading,
+    customSelection,
+    onToggleCustomSource
+}) => {
+  const canGenerate = articleCount >= 5 && customSelection.length === 0;
+  const canGenerateCustom = customSelection.length > 0;
   const isFetchingAll = isLoading && selectedSource?.url === ALL_SOURCES_OBJECT.url;
   
   return (
@@ -49,14 +66,24 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({ sources, selectedSource
 
         <ul className="space-y-1">
           {sources.map((source) => (
-            <li key={source.url}>
+            <li key={source.url} className="flex items-center gap-2 pr-2">
+              <input
+                type="checkbox"
+                id={`source-check-${source.url}`}
+                checked={customSelection.includes(source.url)}
+                onChange={() => onToggleCustomSource(source.url)}
+                disabled={isGeneratingReport || isLoading}
+                className="ml-2 h-4 w-4 rounded bg-brand-surface border-brand-border text-brand-accent focus:ring-brand-accent focus:ring-2 disabled:opacity-50"
+                aria-label={`Select ${source.name} for custom report`}
+              />
               <button
                 onClick={() => onSelectSource(source)}
-                className={`w-full text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm ${
+                disabled={isGeneratingReport || isLoading}
+                className={`flex-grow text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm ${
                   selectedSource?.url === source.url
                     ? 'bg-brand-accent text-brand-bg font-semibold'
                     : 'text-brand-text-primary hover:bg-brand-surface'
-                }`}
+                } disabled:opacity-50 disabled:hover:bg-transparent`}
               >
                 {source.name}
               </button>
@@ -75,7 +102,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({ sources, selectedSource
                         key={report.type}
                         onClick={() => onGenerateFocusedReport(report.type)}
                         disabled={!canGenerate || isGeneratingReport}
-                        title={!canGenerate ? 'Select a source with at least 5 articles' : `Generate ${report.name} Report`}
+                        title={!canGenerate ? 'Select a single source with at least 5 articles' : `Generate ${report.name} Report`}
                         className="w-full flex items-center gap-3 text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm text-brand-text-primary hover:bg-brand-surface disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                     >
                        <Icon className="w-5 h-5 flex-shrink-0" />
@@ -86,11 +113,20 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({ sources, selectedSource
              <button
                 onClick={onGenerateFullReport}
                 disabled={!canGenerate || isGeneratingReport}
-                title={!canGenerate ? 'Select a source with at least 5 articles' : 'Generate Full Report'}
+                title={!canGenerate ? 'Select a single source with at least 5 articles' : 'Generate Full Report'}
                 className="w-full flex items-center gap-3 text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm text-brand-text-primary hover:bg-brand-surface disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent mt-2 pt-3 border-t border-brand-border"
             >
                <DocumentTextIcon className="w-5 h-5 flex-shrink-0" />
                <span className="flex-grow font-semibold">Full Report</span>
+            </button>
+            <button
+                onClick={onGenerateCustomReport}
+                disabled={!canGenerateCustom || isGeneratingReport}
+                title={!canGenerateCustom ? 'Select one or more sources using the checkboxes' : 'Generate a report from selected sources'}
+                className="w-full flex items-center gap-3 text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm text-brand-text-primary hover:bg-brand-surface disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent mt-2"
+            >
+               <CogIcon className="w-5 h-5 flex-shrink-0" />
+               <span className="flex-grow font-semibold">Custom Report</span>
             </button>
         </div>
       </div>
