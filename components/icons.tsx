@@ -77,16 +77,3 @@ export const ArrowPathIcon: React.FC<IconProps> = ({ className }) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001a7.5 7.5 0 0 1-1.08 3.904l-4.224 3.359a4.5 4.5 0 0 1-6.42 0l-4.224-3.359a7.5 7.5 0 0 1-1.08-3.904h4.992v.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 11.664 0l3.181-3.183m-4.992-1.635V5.25" />
   </svg>
 );
-
-export const CogIcon: React.FC<IconProps> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-1.003 1.11-1.226.55-.223 1.159-.223 1.71 0 .55.223 1.02.684 1.11 1.226l.08 1.485a7.5 7.5 0 011.25.966l1.288-.552a1.125 1.125 0 011.372.39l.802 1.386a1.125 1.125 0 01-.39 1.372l-1.288.552a7.5 7.5 0 010 1.932l1.288.552a1.125 1.125 0 01.39 1.372l-.802 1.386a1.125 1.125 0 01-1.372.39l-1.288-.552a7.5 7.5 0 01-1.25.966l-.08 1.485c-.09.542-.56 1.003-1.11 1.226-.55.223-1.159-.223-1.71 0-.55-.223-1.02-.684-1.11-1.226l-.08-1.485a7.5 7.5 0 01-1.25-.966l-1.288.552a1.125 1.125 0 01-1.372-.39l-.802-1.386a1.125 1.125 0 01.39-1.372l1.288-.552a7.5 7.5 0 010-1.932l-1.288-.552a1.125 1.125 0 01-.39-1.372l.802-1.386a1.125 1.125 0 011.372-.39l1.288.552a7.5 7.5 0 011.25-.966l.08-1.485z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-);
-
-export const CheckIcon: React.FC<IconProps> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
-      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.052-.143z" clipRule="evenodd" />
-    </svg>
-);

@@ -1,25 +1,15 @@
 
 import React from 'react';
 import type { RssArticle } from '../types';
-import { DocumentSummarizeIcon, CalendarIcon, CheckIcon } from './icons';
+import { DocumentSummarizeIcon, CalendarIcon } from './icons';
 
 interface ArticleCardProps {
   article: RssArticle;
   onSummarize: (article: RssArticle) => void;
-  isSelectionMode: boolean;
-  isSelected: boolean;
-  onSelect: (guid: string) => void;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, onSummarize, isSelectionMode, isSelected, onSelect }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, onSummarize }) => {
   const cleanDescription = article.description.replace(/<[^>]*>?/gm, '').substring(0, 150);
-
-  const handleCardClick = (e: React.MouseEvent) => {
-    if (isSelectionMode) {
-      e.preventDefault();
-      onSelect(article.guid);
-    }
-  };
 
   const handleSummarizeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,17 +22,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, onSummarize, isSelec
       href={article.link} 
       target="_blank" 
       rel="noopener noreferrer"
-      onClick={handleCardClick}
-      className={`relative bg-brand-surface border rounded-lg p-5 flex flex-col justify-between transition-all duration-300 ${isSelectionMode ? 'cursor-pointer' : ''} ${isSelected ? 'border-brand-accent ring-2 ring-brand-accent' : 'border-brand-border hover:shadow-lg hover:border-brand-accent hover:-translate-y-1'}`}
-      aria-selected={isSelected}
+      className="bg-brand-surface border border-brand-border rounded-lg p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:border-brand-accent hover:-translate-y-1"
     >
-      {isSelectionMode && (
-        <div className="absolute top-3 right-3 z-10 p-1 bg-brand-surface/80 rounded-full pointer-events-none">
-          <div className={`w-5 h-5 rounded-md border-2 ${isSelected ? 'bg-brand-accent border-brand-accent' : 'border-brand-text-secondary/50'} flex items-center justify-center transition-all`}>
-            {isSelected && <CheckIcon className="w-4 h-4 text-brand-bg" />}
-          </div>
-        </div>
-      )}
       <div>
         <h3 className="text-lg font-bold text-brand-text-primary mb-2 line-clamp-3">{article.title}</h3>
         <div className="flex items-center text-xs text-brand-text-secondary mb-3">

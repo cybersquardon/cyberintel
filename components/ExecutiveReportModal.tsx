@@ -2,7 +2,7 @@
 import React from 'react';
 import type { RssArticle } from '../types';
 import LoadingSpinner from './LoadingSpinner';
-import { CloseIcon, BriefcaseIcon, CogIcon, DocumentTextIcon } from './icons';
+import { CloseIcon, BriefcaseIcon } from './icons';
 
 interface ExecutiveReportModalProps {
   title: string;
@@ -14,19 +14,6 @@ interface ExecutiveReportModalProps {
 }
 
 const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({ title, report, isLoading, error, sourceArticles, onClose }) => {
-  const getIcon = () => {
-    switch (title) {
-        case 'Executive Intelligence Briefing':
-            return <BriefcaseIcon className="w-8 h-8 text-brand-accent flex-shrink-0" />;
-        case 'Custom Intelligence Report':
-            return <CogIcon className="w-8 h-8 text-brand-accent flex-shrink-0" />;
-        case 'Report from Selected Articles':
-             return <DocumentTextIcon className="w-8 h-8 text-brand-accent flex-shrink-0" />;
-        default:
-            return null;
-    }
-  }
-  
   return (
     <div 
       className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 animate-fade-in"
@@ -45,7 +32,7 @@ const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({ title, repo
         </button>
         
         <div className="flex items-center gap-3 mb-6">
-          {getIcon()}
+          {title === 'Executive Intelligence Briefing' && <BriefcaseIcon className="w-8 h-8 text-brand-accent" />}
           <h2 className="text-2xl font-bold text-brand-text-primary">{title}</h2>
         </div>
 
@@ -59,16 +46,15 @@ const ExecutiveReportModal: React.FC<ExecutiveReportModalProps> = ({ title, repo
               </div>
             )}
             {error && <p className="text-red-400" role="alert">{error}</p>}
-            {report && <div className="text-brand-text-secondary whitespace-pre-wrap leading-relaxed prose prose-invert prose-p:text-brand-text-secondary prose-headings:text-brand-text-primary prose-strong:text-brand-text-primary" dangerouslySetInnerHTML={{ __html: report.replace(/\n/g, '<br />') }}></div>}
+            {report && <p className="text-brand-text-secondary whitespace-pre-wrap leading-relaxed">{report}</p>}
           </div>
 
           {!isLoading && (report || error) && (
             <div className="mt-6 border-t border-brand-border pt-4">
                 <h3 className="font-semibold text-lg text-brand-text-primary mb-3">References</h3>
                 <ol className="list-decimal list-inside space-y-2 text-sm text-brand-text-secondary">
-                    {sourceArticles.map((article, index) => (
+                    {sourceArticles.map(article => (
                         <li key={article.guid}>
-                           <span className="font-semibold">[Article {index + 1}]</span>{' '}
                             <a href={article.link} target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors">
                                 {article.title}
                             </a>
